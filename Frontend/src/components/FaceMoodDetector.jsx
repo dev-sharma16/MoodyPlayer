@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as faceapi from "face-api.js";
+import "./facialExpressionDetector.css"
 
 const FaceMoodDetector = ({ onMoodChange }) => {
     const videoRef = useRef(null);
@@ -94,7 +95,7 @@ const FaceMoodDetector = ({ onMoodChange }) => {
     }, []);
 
     return (
-        <div style={{position: 'relative'}}>
+        <div className="mood-element">
             <video
                 ref={videoRef}
                 autoPlay
@@ -102,19 +103,22 @@ const FaceMoodDetector = ({ onMoodChange }) => {
                 // width="640"
                 // height="480"
                 // className="absolute top-0 left-0 rounded-md"
-                style={{ transform: "scaleX(-1)", width: "720px", height: "560px" }}
+                // style={{ transform: "scaleX(-1)", width: "720px", height: "560px" }}
+                className="user-feed-video"
             />
-            <canvas
+            {/* <canvas
                 ref={canvasRef}
                 // width="640"
                 // height="480"
                 // className="absolute top-0 left-0"
                 style={{ position: "absolute", top: 0, left: 0, width: "720px", height: "560px"}}
-            />
-            <p className="mt-2 text-center text-blue-600 font-semibold">
-                Current Mood: {mood}
-            </p>
-            <button onClick={detectMood}>Detect Mood</button>
+            /> */}
+            <div className="mood-element-right-section">
+                <p className="mt-2 text-center text-blue-600 font-semibold">
+                    Current Mood: {mood}
+                </p>
+                <button onClick={detectMood}>Detect Mood</button>
+            </div>
         </div>
     );
 };

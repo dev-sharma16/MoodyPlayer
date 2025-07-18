@@ -1,0 +1,40 @@
+.mood-songs{
+    width: 100%;
+    padding: 4rem;
+    padding-top: 0;
+    color: white;
+    
+}
+
+.mood-songs h2{
+    margin-bottom: 1rem;
+}
+
+.mood-songs .song{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    background: #3b3b3b;
+    border-radius: 1rem;
+    padding: .0rem 1.9rem;
+    margin: .7rem 0rem;
+    box-shadow: 4px 3px 5px rgb(26, 26, 26);
+}
+
+.mood-songs .title{
+    display: flex;
+    /* width: 100%; */
+    justify-content : space-evenly;
+    align-items: center;
+    gap: 2rem;
+}
+
+.mood-songs .play-pause-button{
+    display: flex;
+    /* width: 100%; */
+    justify-content : space-evenly;
+    align-items: center;
+    /* gap: 2rem; */
+
+}
