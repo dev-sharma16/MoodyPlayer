@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as faceapi from "face-api.js";
 import "./facialExpressionDetector.css"
+import axios from 'axios'
 
-const FaceMoodDetector = ({ onMoodChange }) => {
+const FaceMoodDetector = ({setSongs, onMoodChange }) => {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [mood, setMood] = useState("Click Button to detect");
@@ -19,15 +20,10 @@ const FaceMoodDetector = ({ onMoodChange }) => {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
-                // videoRef.current.onloadedmetadata = () => {
-                    // videoRef.current.play();
-                    
-                    // Start detection loop after video is ready
-                    // const interval = setInterval(() => {
-                    //     detectMood();
-                    // }, 2000);
-                    // cleanupRef.current = interval;
-                // };
+                videoRef.current.onloadedmetadata = () => {
+                    videoRef.current.play();
+                    console.log("Video started successfully");
+                };
             }
         } catch (err) {
             console.error("Camera access denied..! : ", err);
@@ -38,7 +34,10 @@ const FaceMoodDetector = ({ onMoodChange }) => {
         const video = videoRef.current;
         const canvas = canvasRef.current;
         
-        if (!video || !canvas) return;
+        if (!video || !canvas) {
+            console.log("Video or canvas not available");
+            return;
+        };
         
         const displaySize = {
             width: video.videoWidth,
@@ -83,6 +82,13 @@ const FaceMoodDetector = ({ onMoodChange }) => {
             const topMood = sorted[0][0];
             setMood(topMood);
             if (onMoodChange) onMoodChange(topMood);
+
+            //? when we get 'topMood' then we have to hit api at 'http://localhost:3000/songs?mood={topMood}'
+            axios.get(`http://localhost:3000/songs?mood=${topMood}`)
+            .then(response=>{
+                console.log(`Songs for mood ${topMood} : `,response.data);
+                setSongs(response.data.songs);
+            })
         });
     };
     
@@ -96,23 +102,26 @@ const FaceMoodDetector = ({ onMoodChange }) => {
 
     return (
         <div className="mood-element">
-            <video
-                ref={videoRef}
-                autoPlay
-                muted
-                // width="640"
-                // height="480"
-                // className="absolute top-0 left-0 rounded-md"
-                // style={{ transform: "scaleX(-1)", width: "720px", height: "560px" }}
-                className="user-feed-video"
-            />
-            {/* <canvas
-                ref={canvasRef}
-                // width="640"
-                // height="480"
-                // className="absolute top-0 left-0"
-                style={{ position: "absolute", top: 0, left: 0, width: "720px", height: "560px"}}
-            /> */}
+            <div className="video-wrapper">
+                <video
+                    ref={videoRef}
+                    autoPlay
+                    muted
+                    // width="640"
+                    // height="480"
+                    // className="absolute top-0 left-0 rounded-md"
+                    // style={{ transform: "scaleX(-1)", width: "720px", height: "560px" }}
+                    className="user-feed-video"
+                />
+                <canvas
+                    ref={canvasRef}
+                    // width="640"
+                    // height="480"
+                    // className="absolute top-0 left-0"
+                    // style={{ position: "absolute", top: 5, left: 0, width: "720px", height: "560px"}}
+                    className="video-overlay-canvas"
+                />
+            </div>
             <div className="mood-element-right-section">
                 <p className="mt-2 text-center text-blue-600 font-semibold">
                     Current Mood: {mood}

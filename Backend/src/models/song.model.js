@@ -5,6 +5,7 @@ const songSchema = new mongoose.Schema({
     artist: String,
     mood: String,
     audio: String,
+    audioId: String,
 })
 
 const Song = mongoose.model('song', songSchema)

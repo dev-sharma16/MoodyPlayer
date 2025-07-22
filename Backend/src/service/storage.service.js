@@ -11,7 +11,7 @@ function uploadFile(file){
         imagekit.upload({
             file : file.buffer, 
             fileName : file.originalname, 
-            
+            folder: "moody-player"
         },
         (error,result)=>{
             if(error) {
